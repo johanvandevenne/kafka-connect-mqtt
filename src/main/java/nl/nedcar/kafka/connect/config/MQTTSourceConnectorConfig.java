@@ -23,7 +23,7 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
         super(configDef(), originals);
     }
 
-    protected static ConfigDef configDef() {
+    public static ConfigDef configDef() {
         return new ConfigDef()
                 .define(BROKER,
                         ConfigDef.Type.STRING,

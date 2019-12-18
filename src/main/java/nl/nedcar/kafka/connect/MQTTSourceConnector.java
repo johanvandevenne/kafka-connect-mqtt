@@ -40,7 +40,7 @@ public class MQTTSourceConnector extends SourceConnector {
 
         for (int i=0; i<groupedMQTTTopics.size(); i++) {
             List<String> groupConfig = groupedMQTTTopics.get(i);
-            Map<String, String> taskProps = new HashMap<>(2);
+            Map<String, String> taskProps = new HashMap<>(configProps);
             taskProps.put(MQTTSourceConnectorConfig.MQTT_TOPIC, String.join(",", groupConfig));
             taskProps.put(MQTTSourceConnectorConfig.KAFKA_TOPIC, String.join(",", groupedKafkaTopics.get(i)));
             taskConfigs.add(taskProps);
@@ -53,10 +53,10 @@ public class MQTTSourceConnector extends SourceConnector {
     }
 
     public ConfigDef config() {
-        return null;
+        return MQTTSourceConnectorConfig.configDef();
     }
 
     public String version() {
-        return null;
+        return Version.getVersion();
     }
 }
