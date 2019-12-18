@@ -13,17 +13,21 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
 
     protected static ConfigDef configDef() {
         return new ConfigDef()
-                .define("bucket",
+                .define("broker",
                         ConfigDef.Type.STRING,
                         ConfigDef.Importance.HIGH,
-                        "Name of the bucket to import objects from")
-                .define("prefix.whitelist",
-                        ConfigDef.Type.LIST,
-                        ConfigDef.Importance.HIGH,
-                        "Whitelist of object key prefixes")
-                .define("topic",
+                        "host and port of the MQTT broker")
+                .define("clientID",
                         ConfigDef.Type.STRING,
                         ConfigDef.Importance.HIGH,
-                        "Name of Kafka topic to produce to");
+                        "ClientID")
+                .define("mqtt.topic",
+                        ConfigDef.Type.STRING,
+                        ConfigDef.Importance.HIGH,
+                        "Name of Topic to subscribe to")
+                .define("kafka.topic",
+                        ConfigDef.Type.STRING,
+                        ConfigDef.Importance.HIGH,
+                        "Name of Kafka topic to send to");
     }
 }
