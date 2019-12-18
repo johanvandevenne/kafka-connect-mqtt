@@ -22,12 +22,12 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
                         ConfigDef.Importance.HIGH,
                         "ClientID")
                 .define("mqtt.topic",
-                        ConfigDef.Type.STRING,
+                        ConfigDef.Type.LIST,
                         ConfigDef.Importance.HIGH,
-                        "Name of Topic to subscribe to")
+                        "Names of Topics to subscribe to")
                 .define("kafka.topic",
-                        ConfigDef.Type.STRING,
+                        ConfigDef.Type.LIST,
                         ConfigDef.Importance.HIGH,
-                        "Name of Kafka topic to send to");
+                        "Names of Kafka topics to send to");
     }
 }

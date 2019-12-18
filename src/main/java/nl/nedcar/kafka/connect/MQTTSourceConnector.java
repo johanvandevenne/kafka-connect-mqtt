@@ -4,10 +4,14 @@ import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class MQTTSourceConnector extends SourceConnector {
+
+    private static final Logger log = LoggerFactory.getLogger(MQTTSourceConnector.class);
 
     private MQTTSourceConnectorConfig mqttSourceConnectorConfig;
     private Map<String, String> configProps;
