@@ -6,10 +6,10 @@ import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
 
-    private Logger log = LogManager.getLogger(MQTTSourceTask.class);
+    private Logger log = LoggerFactory.getLogger(MQTTSourceConnector.class);
     private MQTTSourceConnectorConfig config;
     private MQTTSourceConverter mqttSourceConverter;
     private SourceRecordDeque sourceRecordDeque;
@@ -25,6 +25,7 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
     private IMqttClient mqttClient;
 
     public void start(Map<String, String> props) {
+        log.info("*** Enter start");
         config = new MQTTSourceConnectorConfig(props);
         mqttSourceConverter = new MQTTSourceConverter(config);
         this.sourceRecordDeque = SourceRecordDequeBuilder.of().batchSize(4096).emptyWaitMs(100).maximumCapacityTimeoutMs(60000).maximumCapacity(50000).build();
@@ -41,7 +42,7 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
             // TODO Arrays.fill(qosLevels, this.config.mqttQos);
             Arrays.fill(listeners, this);
 
-            log.info("Subscribing to " + topicSubscriptions);
+            log.info("Subscribing to " + topicSubscriptions[0]);
             mqttClient.subscribe(topicSubscriptions, listeners);
         }
         catch (MqttException e) {
@@ -50,7 +51,9 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
     }
 
     public List<SourceRecord> poll() throws InterruptedException {
-        return sourceRecordDeque.getBatch();
+        List<SourceRecord> records = sourceRecordDeque.getBatch();
+        log.info("Records: " + records);
+        return records;
     }
 
     public void stop() {
@@ -69,7 +72,7 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
 
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-        log.debug("Message arrived in connector from topic " + topic);
+        log.info("Message arrived in connector from topic " + topic);
         sourceRecordDeque.add(mqttSourceConverter.convert(mqttMessage));
     }
 }
