@@ -4,6 +4,7 @@ import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;
+import org.apache.kafka.connect.util.ConnectorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +26,23 @@ public class MQTTSourceConnector extends SourceConnector {
         return MQTTSourceTask.class;
     }
 
+    public static void main(String[] args) {
+        new MQTTSourceConnector().taskConfigs(1);
+    }
+
     public List<Map<String, String>> taskConfigs(int maxTasks) {
-        List<Map<String, String>> taskConfigs = new ArrayList<>();
-        Map<String, String> taskProps = new HashMap<>();
-        taskProps.putAll(configProps);
-        for (int i = 0; i < maxTasks; i++) {
+        List<String> mqTTtopics = mqttSourceConnectorConfig.getList(MQTTSourceConnectorConfig.MQTT_TOPIC);
+        List<String> kafkaTopics = mqttSourceConnectorConfig.getList(MQTTSourceConnectorConfig.KAFKA_TOPIC);
+        int numTasks = Math.min(mqTTtopics.size(), maxTasks);
+        List<List<String>> groupedMQTTTopics = ConnectorUtils.groupPartitions(mqTTtopics, numTasks);
+        List<List<String>> groupedKafkaTopics = ConnectorUtils.groupPartitions(kafkaTopics, numTasks);
+        List<Map<String, String>> taskConfigs = new ArrayList<>(groupedMQTTTopics.size());
+
+        for (int i=0; i<groupedMQTTTopics.size(); i++) {
+            List<String> groupConfig = groupedMQTTTopics.get(i);
+            Map<String, String> taskProps = new HashMap<>(2);
+            taskProps.put(MQTTSourceConnectorConfig.MQTT_TOPIC, String.join(",", groupConfig));
+            taskProps.put(MQTTSourceConnectorConfig.KAFKA_TOPIC, String.join(",", groupedKafkaTopics.get(i)));
             taskConfigs.add(taskProps);
         }
         return taskConfigs;
