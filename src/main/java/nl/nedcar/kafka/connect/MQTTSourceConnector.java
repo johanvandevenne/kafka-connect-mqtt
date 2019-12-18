@@ -31,6 +31,7 @@ public class MQTTSourceConnector extends SourceConnector {
     }
 
     public List<Map<String, String>> taskConfigs(int maxTasks) {
+        log.info("Enter taskconfigs");
         List<String> mqTTtopics = mqttSourceConnectorConfig.getList(MQTTSourceConnectorConfig.MQTT_TOPIC);
         List<String> kafkaTopics = mqttSourceConnectorConfig.getList(MQTTSourceConnectorConfig.KAFKA_TOPIC);
         int numTasks = Math.min(mqTTtopics.size(), maxTasks);
@@ -45,6 +46,7 @@ public class MQTTSourceConnector extends SourceConnector {
             taskProps.put(MQTTSourceConnectorConfig.KAFKA_TOPIC, String.join(",", groupedKafkaTopics.get(i)));
             taskConfigs.add(taskProps);
         }
+        log.info("Taskconfigs: " + taskConfigs);
         return taskConfigs;
     }
 
