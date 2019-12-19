@@ -19,6 +19,9 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
     public static final String KAFKA_TOPIC = "kafka.topic";
     public static final String KAFKA_TOPIC_DOC = "List of kafka topics to publish to";
 
+    public static final String MQTT_QOS = "qos";
+    public static final String MQTT_QOS_DOC = "Quality of service MQTT messaging";
+
     public MQTTSourceConnectorConfig(Map<?, ?> originals) {
         super(configDef(), originals);
     }
@@ -34,12 +37,16 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
                         ConfigDef.Importance.HIGH,
                         CLIENTID_DOC)
                 .define(MQTT_TOPIC,
-                        ConfigDef.Type.LIST,
+                        ConfigDef.Type.STRING,
                         ConfigDef.Importance.HIGH,
                         MQTT_TOPIC_DOC)
                 .define(KAFKA_TOPIC,
-                        ConfigDef.Type.LIST,
+                        ConfigDef.Type.STRING,
                         ConfigDef.Importance.HIGH,
-                        KAFKA_TOPIC_DOC);
+                        KAFKA_TOPIC_DOC)
+                .define(MQTT_QOS,
+                        ConfigDef.Type.INT,
+                        ConfigDef.Importance.HIGH,
+                        MQTT_QOS_DOC);
     }
 }
