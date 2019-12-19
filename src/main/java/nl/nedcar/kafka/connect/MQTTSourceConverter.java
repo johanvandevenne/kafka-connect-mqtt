@@ -10,8 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-import static java.util.Collections.EMPTY_MAP;
-
+/**
+ * Converts a MQTT message to a Kafka message
+ */
 public class MQTTSourceConverter {
 
     private MQTTSourceConnectorConfig mqttSourceConnectorConfig;
@@ -23,21 +24,15 @@ public class MQTTSourceConverter {
     }
 
     protected SourceRecord convert(String topic, MqttMessage mqttMessage) {
-        log.info("Converting message: " + mqttMessage);
+        log.trace("Converting MQTT message: " + mqttMessage);
         ConnectHeaders headers = new ConnectHeaders();
         headers.addInt("mqtt.message.id", mqttMessage.getId());
         headers.addInt("mqtt.message.qos", mqttMessage.getQos());
         headers.addBoolean("mqtt.message.duplicate", mqttMessage.isDuplicate());
 
-        log.info("Converting record");
-
-        //SourceRecord result = new SourceRecord(EMPTY_MAP, EMPTY_MAP, this.config.kafkaTopic, (Integer)null, Schema.STRING_SCHEMA, mqttTopic, Schema.BYTES_SCHEMA, message.getPayload(), this.time.milliseconds(), headers);
-        //log.info(mqttSourceConnectorConfig.getString(MQTTSourceConnectorConfig.KAFKA_TOPIC));
-        //log.info(mqttSourceConnectorConfig.getString(MQTTSourceConnectorConfig.MQTT_TOPIC));
-
         SourceRecord sourceRecord = new SourceRecord(new HashMap<>(),
                 new HashMap<>(),
-                "TempTopic",
+                this.mqttSourceConnectorConfig.getString(MQTTSourceConnectorConfig.KAFKA_TOPIC),
                 (Integer) null,
                 Schema.STRING_SCHEMA,
                 topic,
@@ -45,8 +40,7 @@ public class MQTTSourceConverter {
                 mqttMessage.getPayload(),
                 System.currentTimeMillis(),
                 headers);
-
-        log.info("Record1: " + sourceRecord);
+        log.trace("Converted MQTT Message: " + sourceRecord);
         return sourceRecord;
     }
 }
