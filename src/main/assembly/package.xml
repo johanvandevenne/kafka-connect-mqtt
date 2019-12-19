@@ -8,16 +8,6 @@
         <format>dir</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
-    <fileSets>
-        <fileSet>
-            <outputDirectory>share/kafka-connect-mqtt/</outputDirectory>
-            <includes>
-                <include>*.properties</include>
-            </includes>
-            <directory>src/main/resources</directory>
-            <filtered>true</filtered>
-        </fileSet>
-    </fileSets>
     <dependencySets>
         <dependencySet>
             <outputDirectory>share/kafka-connect-mqtt/</outputDirectory>
