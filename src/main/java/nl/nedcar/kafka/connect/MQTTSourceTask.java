@@ -82,9 +82,9 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
      */
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-        log.trace("Message arrived in connector from topic " + topic);
+        log.debug("Message arrived in connector from topic " + topic);
         SourceRecord record = mqttSourceConverter.convert(topic, mqttMessage);
-        log.trace("Converted record: " + record);
+        log.debug("Converted record: " + record);
         sourceRecordDeque.add(record);
     }
 }
