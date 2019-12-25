@@ -41,7 +41,12 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
             int qosLevel = this.config.getInt(MQTTSourceConnectorConfig.MQTT_QOS);
 
             log.info("Subscribing to " + topicSubscription + " with QOS " + qosLevel);
-            mqttClient.subscribe(topicSubscription, qosLevel, this);
+            mqttClient.subscribe(topicSubscription, qosLevel, (topic, message) -> {
+                log.debug("Message arrived in connector from topic " + topic);
+                SourceRecord record = mqttSourceConverter.convert(topic, message);
+                log.debug("Converted record: " + record);
+                sourceRecordDeque.add(record);
+            });
             log.info("Subscribed to " + topicSubscription + " with QOS " + qosLevel);
         }
         catch (MqttException e) {
