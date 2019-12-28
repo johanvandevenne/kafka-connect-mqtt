@@ -39,7 +39,7 @@ public class MQTTSinkTask extends SinkTask {
 
             log.info("Connecting to MQTT Broker " + config.getString(MQTTSourceConnectorConfig.BROKER));
             mqttClient.connect();
-            log.info("Connected to MQTT Broker");
+            log.info("Connected to MQTT Broker. This connector publishes to the " + this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC) + " topic");
 
         }
         catch (MqttException e) {
@@ -52,8 +52,10 @@ public class MQTTSinkTask extends SinkTask {
         try {
             for (Iterator<SinkRecord> iterator = collection.iterator(); iterator.hasNext(); ) {
                 SinkRecord sinkRecord = iterator.next();
+                log.trace("Received message with offset " + sinkRecord.kafkaOffset());
                 MqttMessage mqttMessage = mqttSinkConverter.convert(sinkRecord);
                 if (!mqttClient.isConnected()) mqttClient.connect();
+                log.debug("Publishing message to topic " + this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC) + " with payload " + new String(mqttMessage.getPayload()));
                 mqttClient.publish(this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC), mqttMessage);
             }
         } catch (MqttException e) {

@@ -26,11 +26,12 @@ public class MQTTSinkConverter {
     }
 
     protected MqttMessage convert(SinkRecord sinkRecord) {
-        log.info("Converting Kafka message");
+        log.trace("Converting Kafka message");
 
         MqttMessage mqttMessage = new MqttMessage();
         mqttMessage.setPayload(((String)sinkRecord.value()).getBytes());
         mqttMessage.setQos(this.mqttSinkConnectorConfig.getInt(MQTTSourceConnectorConfig.MQTT_QOS));
+        log.trace("Result MQTTMessage: " + mqttMessage);
         return mqttMessage;
     }
 }
