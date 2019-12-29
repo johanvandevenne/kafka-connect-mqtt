@@ -34,7 +34,7 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
             mqttClient = new MqttClient(config.getString(MQTTSourceConnectorConfig.BROKER), config.getString(MQTTSourceConnectorConfig.CLIENTID), new MemoryPersistence());
 
             log.info("Connecting to MQTT Broker " + config.getString(MQTTSourceConnectorConfig.BROKER));
-            mqttClient.connect();
+            connect(mqttClient);
             log.info("Connected to MQTT Broker");
 
             String topicSubscription = this.config.getString(MQTTSourceConnectorConfig.MQTT_TOPIC);
@@ -52,6 +52,16 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
         catch (MqttException e) {
             throw new ConnectException(e);
         }
+    }
+
+    private void connect(IMqttClient mqttClient) throws MqttException{
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(config.getBoolean(MQTTSourceConnectorConfig.MQTT_CLEANSESSION));
+        connOpts.setKeepAliveInterval(config.getInt(MQTTSourceConnectorConfig.MQTT_KEEPALIVEINTERVAL));
+        connOpts.setConnectionTimeout(config.getInt(MQTTSourceConnectorConfig.MQTT_CONNECTIONTIMEOUT));
+        connOpts.setAutomaticReconnect(config.getBoolean(MQTTSourceConnectorConfig.MQTT_ARC));
+
+        mqttClient.connect(connOpts);
     }
 
     /**

@@ -5,10 +5,7 @@ import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;
-import org.eclipse.paho.client.mqttv3.IMqttClient;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +35,7 @@ public class MQTTSinkTask extends SinkTask {
             mqttClient = new MqttClient(config.getString(MQTTSinkConnectorConfig.BROKER), config.getString(MQTTSinkConnectorConfig.CLIENTID), new MemoryPersistence());
 
             log.info("Connecting to MQTT Broker " + config.getString(MQTTSourceConnectorConfig.BROKER));
-            mqttClient.connect();
+            connect(mqttClient);
             log.info("Connected to MQTT Broker. This connector publishes to the " + this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC) + " topic");
 
         }
@@ -47,12 +44,22 @@ public class MQTTSinkTask extends SinkTask {
         }
     }
 
+    private void connect(IMqttClient mqttClient) throws MqttException{
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(config.getBoolean(MQTTSinkConnectorConfig.MQTT_CLEANSESSION));
+        connOpts.setKeepAliveInterval(config.getInt(MQTTSinkConnectorConfig.MQTT_KEEPALIVEINTERVAL));
+        connOpts.setConnectionTimeout(config.getInt(MQTTSinkConnectorConfig.MQTT_CONNECTIONTIMEOUT));
+        connOpts.setAutomaticReconnect(config.getBoolean(MQTTSinkConnectorConfig.MQTT_ARC));
+
+        mqttClient.connect(connOpts);
+    }
+
     @Override
     public void put(Collection<SinkRecord> collection) {
         try {
             for (Iterator<SinkRecord> iterator = collection.iterator(); iterator.hasNext(); ) {
                 SinkRecord sinkRecord = iterator.next();
-                log.trace("Received message with offset " + sinkRecord.kafkaOffset());
+                log.debug("Received message with offset " + sinkRecord.kafkaOffset());
                 MqttMessage mqttMessage = mqttSinkConverter.convert(sinkRecord);
                 if (!mqttClient.isConnected()) mqttClient.connect();
                 log.debug("Publishing message to topic " + this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC) + " with payload " + new String(mqttMessage.getPayload()));
