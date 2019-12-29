@@ -51,6 +51,8 @@ public class MQTTSinkTask extends SinkTask {
         connOpts.setConnectionTimeout(config.getInt(MQTTSinkConnectorConfig.MQTT_CONNECTIONTIMEOUT));
         connOpts.setAutomaticReconnect(config.getBoolean(MQTTSinkConnectorConfig.MQTT_ARC));
 
+        log.debug("MQTT Connection properties: " + connOpts);
+
         mqttClient.connect(connOpts);
     }
 

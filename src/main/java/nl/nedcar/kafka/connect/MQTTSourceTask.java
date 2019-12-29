@@ -61,6 +61,8 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
         connOpts.setConnectionTimeout(config.getInt(MQTTSourceConnectorConfig.MQTT_CONNECTIONTIMEOUT));
         connOpts.setAutomaticReconnect(config.getBoolean(MQTTSourceConnectorConfig.MQTT_ARC));
 
+        log.debug("MQTT Connection properties: " + connOpts);
+
         mqttClient.connect(connOpts);
     }
 
