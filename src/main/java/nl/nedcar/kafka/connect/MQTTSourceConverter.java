@@ -24,7 +24,7 @@ public class MQTTSourceConverter {
     }
 
     protected SourceRecord convert(String topic, MqttMessage mqttMessage) {
-        log.info("Converting MQTT message: " + mqttMessage);
+        log.debug("Converting MQTT message: " + mqttMessage);
         // Kafka 2.3
         ConnectHeaders headers = new ConnectHeaders();
         headers.addInt("mqtt.message.id", mqttMessage.getId());
@@ -50,7 +50,7 @@ public class MQTTSourceConverter {
                 new String(mqttMessage.getPayload()),
                 System.currentTimeMillis(),
                 headers);
-        log.info("Converted MQTT Message: " + sourceRecord);
+        log.debug("Converted MQTT Message: " + sourceRecord);
         return sourceRecord;
     }
 }
