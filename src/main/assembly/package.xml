@@ -10,7 +10,7 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/Volumes/Data/confluent-5.3.1/share/kafka-connect-mqtt/</outputDirectory>
+            <outputDirectory>kafka-connect-mqtt/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
