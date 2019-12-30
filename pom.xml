@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nl.nedcar</groupId>
-    <artifactId>kafka.connect.mqtt</artifactId>
+    <artifactId>kafka-connect-mqtt</artifactId>
     <packaging>jar</packaging>
     <name>kafka.connect.mqtt</name>
     <version>1.0.0</version>
