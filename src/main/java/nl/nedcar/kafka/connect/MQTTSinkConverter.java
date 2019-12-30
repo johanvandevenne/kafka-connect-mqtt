@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 
 /**
- * Converts a MQTT message to a Kafka message
+ * Converts a Kafka message to a MQTT Message
  */
 public class MQTTSinkConverter {
 

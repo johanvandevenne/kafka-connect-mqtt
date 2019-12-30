@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Implementation of the Kafka Connect Sink connector
+ */
 public class MQTTSinkConnector extends SinkConnector {
 
     private static final Logger log = LoggerFactory.getLogger(MQTTSinkConnector.class);

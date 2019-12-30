@@ -41,7 +41,7 @@ You must have Kafka 2+ installed
 
 * Copy the folder `/target/kafka-connect-mqtt-1.0-0-package/share/kafka-connect-mqtt` to your Kafka Connect plugin path
 * Restart Kafka Connect
-* Check if the connectors have been loaded succesfully
+* Check if the connector has been loaded succesfully
 
 ```
 http://<kafkaconnect>:8083/connector-plugins

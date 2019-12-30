@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Implementation of the Kafka Connect Sink task
+ */
 public class MQTTSinkTask extends SinkTask {
 
     private Logger log = LoggerFactory.getLogger(MQTTSinkTask.class);
