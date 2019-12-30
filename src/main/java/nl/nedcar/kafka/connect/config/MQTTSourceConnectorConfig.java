@@ -65,6 +65,7 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
                 .define(MQTT_QOS,
                         ConfigDef.Type.INT,
                         1,
+                        ConfigDef.Range.between(1,3),
                         ConfigDef.Importance.MEDIUM,
                         MQTT_QOS_DOC)
                 .define(MQTT_ARC,

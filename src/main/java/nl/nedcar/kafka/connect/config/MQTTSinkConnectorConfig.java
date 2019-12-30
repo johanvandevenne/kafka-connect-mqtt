@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class MQTTSinkConnectorConfig extends AbstractConfig {
 
-    public static final String BROKER = "broker";
+    public static final String BROKER = "mqtt.broker";
     public static final String BROKER_DOC = "Host and port of the MQTT broker, eg: tcp://192.168.1.1:1883";
 
-    public static final String CLIENTID = "clientID";
+    public static final String CLIENTID = "mqtt.clientID";
     public static final String CLIENTID_DOC = "clientID";
 
     public static final String MQTT_TOPIC = "mqtt.topic";
@@ -31,7 +31,7 @@ public class MQTTSinkConnectorConfig extends AbstractConfig {
     public static final String KAFKA_TOPIC = "topics";
     public static final String KAFKA_TOPIC_DOC = "List of kafka topics to consume from";
 
-    public static final String MQTT_QOS = "qos";
+    public static final String MQTT_QOS = "mqtt.qos";
     public static final String MQTT_QOS_DOC = "Quality of service MQTT messaging, default is 1 (at least once)";
 
     public static final String MQTT_USERNAME = "mqtt.userName";
@@ -65,6 +65,7 @@ public class MQTTSinkConnectorConfig extends AbstractConfig {
                 .define(MQTT_QOS,
                         ConfigDef.Type.INT,
                         1,
+                        ConfigDef.Range.between(1,3),
                         ConfigDef.Importance.MEDIUM,
                         MQTT_QOS_DOC)
                 .define(MQTT_ARC,
