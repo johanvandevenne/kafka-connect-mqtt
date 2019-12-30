@@ -85,7 +85,7 @@ curl -X POST \
     }
 }'
 ```
-####Optional Configuration options
+###Optional Configuration options
 * `mqtt.qos` (optional): 0 – At most Once, 1 – At Least Once, 2 – Exactly Once
 * `mqtt.automaticReconnect` (optional)(default: true): Should the client automatically reconnect in case of connection failures
 * `mqtt.keepAliveInterval` (optional)(default: 60 seconds)
@@ -119,7 +119,7 @@ curl -X POST \
 }'
 ```
 
-####Optional Configuration options
+###Optional Configuration options
 * `mqtt.qos` (optional): 0 – At most Once, 1 – At Least Once, 2 – Exactly Once
 * `mqtt.automaticReconnect` (optional)(default: true): Should the client automatically reconnect in case of connection failures
 * `mqtt.keepAliveInterval` (optional)(default: 60 seconds)
