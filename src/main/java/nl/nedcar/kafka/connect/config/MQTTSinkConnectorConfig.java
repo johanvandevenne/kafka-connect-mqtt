@@ -34,6 +34,12 @@ public class MQTTSinkConnectorConfig extends AbstractConfig {
     public static final String MQTT_QOS = "qos";
     public static final String MQTT_QOS_DOC = "Quality of service MQTT messaging, default is 1 (at least once)";
 
+    public static final String MQTT_USERNAME = "mqtt.userName";
+    public static final String MQTT_USERNAME_DOC = "Sets the username for the MQTT connection timeout, default is \"\"";
+
+    public static final String MQTT_PASSWORD = "mqtt.password";
+    public static final String MQTT_PASSWORD_DOC = "Sets the password for the MQTT connection timeout, default is \"\"";
+
     public MQTTSinkConnectorConfig(Map<?, ?> originals) {
         super(configDef(), originals);
     }
@@ -80,6 +86,16 @@ public class MQTTSinkConnectorConfig extends AbstractConfig {
                         ConfigDef.Type.INT,
                         30,
                         ConfigDef.Importance.LOW,
-                        MQTT_CONNECTIONTIMEOUT_DOC);
+                        MQTT_CONNECTIONTIMEOUT_DOC)
+                .define(MQTT_USERNAME,
+                        ConfigDef.Type.STRING,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_USERNAME_DOC)
+                .define(MQTT_PASSWORD,
+                        ConfigDef.Type.PASSWORD,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_PASSWORD_DOC);
     }
 }

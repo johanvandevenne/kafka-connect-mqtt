@@ -1,5 +1,5 @@
 curl -X POST \
-  http://192.168.1.10:8083/connectors \
+  http://localhost:8083/connectors \
   -H 'Content-Type: application/json' \
   -d '{ "name": "testmqtt",
     "config":
@@ -7,9 +7,11 @@ curl -X POST \
       "connector.class":"nl.nedcar.kafka.connect.MQTTSourceConnector",
       "mqtt.topic":"tempTopic",
       "kafka.topic":"loxone",
-      "qos":"1",
-      "clientID":"testjohan",
-      "broker":"tcp://192.168.1.10:1883",
+      "mqtt.qos":"1",
+      "mqtt.clientID":"testjohan",
+      "mqtt.broker":"tcp://127.0.0.1:1883",
+      "mqtt.userName":"johan",
+      "mqtt.password":"johantest",
       "key.converter":"org.apache.kafka.connect.storage.StringConverter",
       "key.converter.schemas.enable":false,
       "value.converter":"org.apache.kafka.connect.storage.StringConverter",

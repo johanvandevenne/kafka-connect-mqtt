@@ -51,6 +51,11 @@ public class MQTTSinkTask extends SinkTask {
         connOpts.setConnectionTimeout(config.getInt(MQTTSinkConnectorConfig.MQTT_CONNECTIONTIMEOUT));
         connOpts.setAutomaticReconnect(config.getBoolean(MQTTSinkConnectorConfig.MQTT_ARC));
 
+        if (!config.getString(MQTTSinkConnectorConfig.MQTT_USERNAME).equals("") && !config.getPassword(MQTTSinkConnectorConfig.MQTT_PASSWORD).equals("")) {
+            connOpts.setUserName(config.getString(MQTTSinkConnectorConfig.MQTT_USERNAME));
+            connOpts.setPassword(config.getPassword(MQTTSinkConnectorConfig.MQTT_PASSWORD).value().toCharArray());
+        }
+
         log.debug("MQTT Connection properties: " + connOpts);
 
         mqttClient.connect(connOpts);
@@ -77,7 +82,7 @@ public class MQTTSinkTask extends SinkTask {
     public void stop() {
         if (mqttClient.isConnected()) {
             try {
-                log.debug("Disconnecting from MQTT Broker " + config.getString(MQTTSourceConnectorConfig.BROKER));
+                log.debug("Disconnecting from MQTT Broker " + config.getString(MQTTSinkConnectorConfig.BROKER));
                 mqttClient.disconnect();
             } catch (MqttException mqttException) {
                 log.error("Exception thrown while disconnecting client.", mqttException);

@@ -31,6 +31,12 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
     public static final String MQTT_CONNECTIONTIMEOUT = "mqtt.connectionTimeout";
     public static final String MQTT_CONNECTIONTIMEOUT_DOC = "Sets the connection timeout, default is 30";
 
+    public static final String MQTT_USERNAME = "mqtt.userName";
+    public static final String MQTT_USERNAME_DOC = "Sets the username for the MQTT connection timeout, default is \"\"";
+
+    public static final String MQTT_PASSWORD = "mqtt.password";
+    public static final String MQTT_PASSWORD_DOC = "Sets the password for the MQTT connection timeout, default is \"\"";
+
     public static final String KAFKA_TOPIC = "kafka.topic";
     public static final String KAFKA_TOPIC_DOC = "List of kafka topics to publish to";
 
@@ -81,6 +87,16 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
                         30,
                         ConfigDef.Importance.LOW,
                         MQTT_CONNECTIONTIMEOUT_DOC)
+                .define(MQTT_USERNAME,
+                        ConfigDef.Type.STRING,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_USERNAME_DOC)
+                .define(MQTT_PASSWORD,
+                        ConfigDef.Type.PASSWORD,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_PASSWORD_DOC)
                 ;
     }
 }
