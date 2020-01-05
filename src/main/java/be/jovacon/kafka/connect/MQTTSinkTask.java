@@ -1,7 +1,7 @@
-package nl.nedcar.kafka.connect;
+package be.jovacon.kafka.connect;
 
-import nl.nedcar.kafka.connect.config.MQTTSinkConnectorConfig;
-import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
+import be.jovacon.kafka.connect.config.MQTTSinkConnectorConfig;
+import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;

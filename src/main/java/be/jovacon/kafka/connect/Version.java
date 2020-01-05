@@ -1,6 +1,6 @@
 
 
-package nl.nedcar.kafka.connect;
+package be.jovacon.kafka.connect;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

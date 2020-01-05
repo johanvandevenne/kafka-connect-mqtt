@@ -50,12 +50,12 @@ If you see these entries, the connector has been installed succesfully
 
 ```
 {
-    "class": "nl.nedcar.kafka.connect.MQTTSinkConnector",
+    "class": "MQTTSinkConnector",
     "type": "sink",
     "version": "1.0.0"
 },
 {
-    "class": "nl.nedcar.kafka.connect.MQTTSourceConnector",
+    "class": "MQTTSourceConnector",
     "type": "source",
     "version": "1.0.0"
 },
@@ -73,7 +73,7 @@ curl -X POST \
   -d '{ "name": "mqtt-source-connector",
     "config":
     {
-      "connector.class":"nl.nedcar.kafka.connect.MQTTSourceConnector",
+      "connector.class":"MQTTSourceConnector",
       "mqtt.topic":"my_mqtt_topic",
       "kafka.topic":"my_kafka_topic",
       "mqtt.clientID":"my_client_id",
@@ -106,7 +106,7 @@ curl -X POST \
   -d '{ "name": "mqtt-sink-connector",
     "config":
     {
-      "connector.class":"nl.nedcar.kafka.connect.MQTTSinkConnector",
+      "connector.class":"MQTTSinkConnector",
       "mqtt.topic":"my_mqtt_topic",
       "topics":"my_kafka_topic",
       "mqtt.clientID":"my_client_id",

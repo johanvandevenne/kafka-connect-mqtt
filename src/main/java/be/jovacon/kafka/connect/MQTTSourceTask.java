@@ -1,8 +1,8 @@
-package nl.nedcar.kafka.connect;
+package be.jovacon.kafka.connect;
 
+import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
 import com.github.jcustenborder.kafka.connect.utils.data.SourceRecordDeque;
 import com.github.jcustenborder.kafka.connect.utils.data.SourceRecordDequeBuilder;
-import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;

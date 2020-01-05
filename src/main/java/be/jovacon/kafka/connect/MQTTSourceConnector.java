@@ -1,6 +1,6 @@
-package nl.nedcar.kafka.connect;
+package be.jovacon.kafka.connect;
 
-import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
+import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;

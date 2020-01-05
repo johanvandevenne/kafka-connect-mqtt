@@ -1,16 +1,11 @@
-package nl.nedcar.kafka.connect;
+package be.jovacon.kafka.connect;
 
-import nl.nedcar.kafka.connect.config.MQTTSinkConnectorConfig;
-import nl.nedcar.kafka.connect.config.MQTTSourceConnectorConfig;
-import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.header.ConnectHeaders;
+import be.jovacon.kafka.connect.config.MQTTSinkConnectorConfig;
+import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
 import org.apache.kafka.connect.sink.SinkRecord;
-import org.apache.kafka.connect.source.SourceRecord;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 
 /**
  * Converts a Kafka message to a MQTT Message

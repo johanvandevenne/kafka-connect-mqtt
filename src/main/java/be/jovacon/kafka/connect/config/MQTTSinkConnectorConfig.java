@@ -1,4 +1,4 @@
-package nl.nedcar.kafka.connect.config;
+package be.jovacon.kafka.connect.config;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
