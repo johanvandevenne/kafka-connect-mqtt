@@ -4,6 +4,7 @@ import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 
 import java.util.Map;
+import org.apache.kafka.common.config.ConfigDef.Type;
 
 public class MQTTSourceConnectorConfig extends AbstractConfig {
 
@@ -36,6 +37,18 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
 
     public static final String MQTT_PASSWORD = "mqtt.password";
     public static final String MQTT_PASSWORD_DOC = "Sets the password for the MQTT connection timeout, default is \"\"";
+
+    public static final String MQTT_CA_CERT = "mqtt.ssl.caCert";
+    public static final String MQTT_CA_CERT_DOC = "Sets the PEM encoded CA certificate to verify server identity with, default is \"\"";
+
+    public static final String MQTT_CLIENT_CERT = "mqtt.ssl.clientCert";
+    public static final String MQTT_CLIENT_CERT_DOC = "Sets the PEM encoded client certificate to authenticate against the server with, default is \"\"";
+
+    public static final String MQTT_CLIENT_KEY = "mqtt.ssl.clientKey";
+    public static final String MQTT_CLIENT_KEY_DOC = "Sets the PEM encoded private key of the client, default is \"\"";
+
+    public static final String MQTT_TLS_VERSION = "mqtt.ssl.tlsVersion";
+    public static final String MQTT_TLS_VERSION_DOC = "Sets the TLS version to use, default is \"TLSV1.2\"";
 
     public static final String KAFKA_TOPIC = "kafka.topic";
     public static final String KAFKA_TOPIC_DOC = "List of kafka topics to publish to";
@@ -98,6 +111,26 @@ public class MQTTSourceConnectorConfig extends AbstractConfig {
                         "",
                         ConfigDef.Importance.LOW,
                         MQTT_PASSWORD_DOC)
+                .define(MQTT_CA_CERT,
+                        Type.STRING,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_CA_CERT_DOC)
+                .define(MQTT_CLIENT_CERT,
+                        Type.STRING,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_CLIENT_CERT_DOC)
+                .define(MQTT_CLIENT_KEY,
+                        Type.STRING,
+                        "",
+                        ConfigDef.Importance.LOW,
+                        MQTT_CLIENT_KEY_DOC)
+                .define(MQTT_TLS_VERSION,
+                        Type.STRING,
+                        "TLSV1.2",
+                        ConfigDef.Importance.LOW,
+                        MQTT_TLS_VERSION_DOC)
                 ;
     }
 }
