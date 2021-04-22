@@ -1,8 +1,11 @@
 package be.jovacon.kafka.connect;
 
 import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
+import be.jovacon.kafka.connect.util.SslKit;
 import com.github.jcustenborder.kafka.connect.utils.data.SourceRecordDeque;
 import com.github.jcustenborder.kafka.connect.utils.data.SourceRecordDequeBuilder;
+import java.io.File;
+import java.security.Security;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
@@ -49,12 +52,12 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
             });
             log.info("Subscribed to " + topicSubscription + " with QOS " + qosLevel);
         }
-        catch (MqttException e) {
+        catch (Exception e) {
             throw new ConnectException(e);
         }
     }
 
-    private void connect(IMqttClient mqttClient) throws MqttException{
+    private void connect(IMqttClient mqttClient) throws Exception{
         MqttConnectOptions connOpts = new MqttConnectOptions();
         connOpts.setCleanSession(config.getBoolean(MQTTSourceConnectorConfig.MQTT_CLEANSESSION));
         connOpts.setKeepAliveInterval(config.getInt(MQTTSourceConnectorConfig.MQTT_KEEPALIVEINTERVAL));
@@ -66,8 +69,22 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
             connOpts.setPassword(config.getPassword(MQTTSourceConnectorConfig.MQTT_PASSWORD).value().toCharArray());
         }
 
-        log.info("MQTT Connection properties: " + connOpts);
+        if (!config.getString(MQTTSourceConnectorConfig.MQTT_CA_CERT).equals("") && !config.getString(MQTTSourceConnectorConfig.MQTT_CLIENT_CERT).equals("")
+            && !config.getString(MQTTSourceConnectorConfig.MQTT_CLIENT_KEY).equals("")) {
+            connOpts.setSocketFactory(
+                SslKit.getSocketFactory(
+                    new File(config.getString(MQTTSourceConnectorConfig.MQTT_CA_CERT)),
+                    new File(config.getString(MQTTSourceConnectorConfig.MQTT_CLIENT_CERT)),
+                    new File(config.getString(MQTTSourceConnectorConfig.MQTT_CLIENT_KEY)),
+                    config.getString(MQTTSourceConnectorConfig.MQTT_TLS_VERSION)));
+        } else if (!config.getString(MQTTSourceConnectorConfig.MQTT_CA_CERT).equals("")) {
+            connOpts.setSocketFactory(
+                SslKit.getSocketFactory(
+                    new File(config.getString(MQTTSourceConnectorConfig.MQTT_CA_CERT)),
+                    config.getString(MQTTSourceConnectorConfig.MQTT_TLS_VERSION)));
+        }
 
+        log.info("MQTT Connection properties: " + connOpts);
         mqttClient.connect(connOpts);
     }
 

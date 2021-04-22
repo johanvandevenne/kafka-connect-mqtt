@@ -2,6 +2,8 @@ package be.jovacon.kafka.connect;
 
 import be.jovacon.kafka.connect.config.MQTTSinkConnectorConfig;
 import be.jovacon.kafka.connect.config.MQTTSourceConnectorConfig;
+import be.jovacon.kafka.connect.util.SslKit;
+import java.io.File;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;
@@ -42,12 +44,12 @@ public class MQTTSinkTask extends SinkTask {
             log.info("Connected to MQTT Broker. This connector publishes to the " + this.config.getString(MQTTSinkConnectorConfig.MQTT_TOPIC) + " topic");
 
         }
-        catch (MqttException e) {
+        catch (Exception e) {
             throw new ConnectException(e);
         }
     }
 
-    private void connect(IMqttClient mqttClient) throws MqttException{
+    private void connect(IMqttClient mqttClient) throws Exception{
         MqttConnectOptions connOpts = new MqttConnectOptions();
         connOpts.setCleanSession(config.getBoolean(MQTTSinkConnectorConfig.MQTT_CLEANSESSION));
         connOpts.setKeepAliveInterval(config.getInt(MQTTSinkConnectorConfig.MQTT_KEEPALIVEINTERVAL));
@@ -59,8 +61,22 @@ public class MQTTSinkTask extends SinkTask {
             connOpts.setPassword(config.getPassword(MQTTSinkConnectorConfig.MQTT_PASSWORD).value().toCharArray());
         }
 
-        log.debug("MQTT Connection properties: " + connOpts);
+        if (!config.getString(MQTTSinkConnectorConfig.MQTT_CA_CERT).equals("") && !config.getString(MQTTSourceConnectorConfig.MQTT_CLIENT_CERT).equals("")
+            && !config.getString(MQTTSinkConnectorConfig.MQTT_CLIENT_KEY).equals("")) {
+            connOpts.setSocketFactory(
+                SslKit.getSocketFactory(
+                    new File(config.getString(MQTTSinkConnectorConfig.MQTT_CA_CERT)),
+                    new File(config.getString(MQTTSinkConnectorConfig.MQTT_CLIENT_CERT)),
+                    new File(config.getString(MQTTSinkConnectorConfig.MQTT_CLIENT_KEY)),
+                    config.getString(MQTTSinkConnectorConfig.MQTT_TLS_VERSION)));
+        } else if (!config.getString(MQTTSinkConnectorConfig.MQTT_CA_CERT).equals("")) {
+            connOpts.setSocketFactory(
+                SslKit.getSocketFactory(
+                    new File(config.getString(MQTTSinkConnectorConfig.MQTT_CA_CERT)),
+                    config.getString(MQTTSinkConnectorConfig.MQTT_TLS_VERSION)));
+        }
 
+        log.info("MQTT Connection properties: " + connOpts);
         mqttClient.connect(connOpts);
     }
 

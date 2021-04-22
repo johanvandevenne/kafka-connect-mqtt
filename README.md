@@ -128,6 +128,11 @@ curl -X POST \
 * `mqtt.username` (optional): Username to connect to MQTT broker
 * `mqtt.password` (optional): Password to connect to MQTT broker
 
+### SSL/TLS Configuration options
+* `mqtt.ssl.caCert` (optional) - Path to the PEM encoded CA file to use to verify server identity.
+* `mqtt.ssl.clientCert` (optional) - Path to the PEM encoded client certificate presented to the server for TLS authentication.
+* `mqtt.ssl.clientKey` (optional) - Path to the PEM encoded client private key, required when `mqtt.ssl.clientCert` is set.
+* `mqtt.ssl.tlsVersion` (optional)(default: TLSV1.2) - The TLS version to use for the connection.
 
 ## Authors
 
