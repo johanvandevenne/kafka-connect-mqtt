@@ -6,13 +6,66 @@
     <id>package</id>
     <formats>
         <format>dir</format>
+        <format>zip</format>
     </formats>
-    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>doc/</outputDirectory>
+            <includes>
+                <include>version.txt*</include>
+                <include>README*</include>
+                <include>LICENSE*</include>
+                <include>NOTICE*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>doc</outputDirectory>
+            <includes>
+                <include>licenses.html*</include>
+                <include>licenses/</include>
+                <include>notices/</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/config</directory>
+            <outputDirectory>etc/</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/target</directory>
+            <includes>
+                <include>manifest.json</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/target/components/assets/</directory>
+            <outputDirectory>assets</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>kafka-connect-mqtt/</outputDirectory>
+            <outputDirectory>lib</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+            <excludes>
+                <exclude>io.confluent:kafka-connect-maven-plugin</exclude>
+                <exclude>org.apache.kafka:connect-api</exclude>
+                <exclude>org.apache.kafka:connect-file</exclude>
+                <exclude>org.apache.kafka:connect-json</exclude>
+                <exclude>org.apache.kafka:connect-runtime</exclude>
+                <exclude>org.apache.kafka:connect-transform</exclude>
+                <exclude>org.apache.kafka:kafka-clients</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
 </assembly>
