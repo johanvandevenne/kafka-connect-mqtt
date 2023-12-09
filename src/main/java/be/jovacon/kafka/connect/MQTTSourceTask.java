@@ -31,8 +31,28 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
         mqttSourceConverter = new MQTTSourceConverter(config);
         this.sourceRecordDeque = SourceRecordDequeBuilder.of().batchSize(4096).emptyWaitMs(100).maximumCapacityTimeoutMs(60000).maximumCapacity(50000).build();
         try {
-            mqttClient = new MqttClient(config.getString(MQTTSourceConnectorConfig.BROKER), config.getString(MQTTSourceConnectorConfig.CLIENTID), new MemoryPersistence());
+            String clientId = config.getString(MQTTSourceConnectorConfig.CLIENTID);
+            log.info("Connecting with clientID=" + clientId);
+            mqttClient = new MqttClient(config.getString(MQTTSourceConnectorConfig.BROKER), clientId, new MemoryPersistence());
+            mqttClient.setCallback(new MqttCallback() {
+                @Override
+                public void connectionLost(Throwable cause) {
+                    log.error("MQTT Connection Lost", cause);
+                }
 
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    log.info("1. Message arrived in connector from topic " + topic);
+                    SourceRecord record = mqttSourceConverter.convert(topic, message);
+                    log.info("1. Converted record: " + record);
+                    sourceRecordDeque.add(record);
+                }
+
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
+                    log.info("MQTT Delivery Complete"+ token);
+                }
+            });
             log.info("Connecting to MQTT Broker " + config.getString(MQTTSourceConnectorConfig.BROKER));
             connect(mqttClient);
             log.info("Connected to MQTT Broker");
@@ -42,9 +62,9 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
 
             log.info("Subscribing to " + topicSubscription + " with QOS " + qosLevel);
             mqttClient.subscribe(topicSubscription, qosLevel, (topic, message) -> {
-                log.debug("Message arrived in connector from topic " + topic);
+                log.info("2. Message arrived in connector from topic " + topic);
                 SourceRecord record = mqttSourceConverter.convert(topic, message);
-                log.debug("Converted record: " + record);
+                log.info("2. Converted record: " + record);
                 sourceRecordDeque.add(record);
             });
             log.info("Subscribed to " + topicSubscription + " with QOS " + qosLevel);
