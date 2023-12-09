@@ -42,10 +42,7 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    log.info("1. Message arrived in connector from topic " + topic);
-                    SourceRecord record = mqttSourceConverter.convert(topic, message);
-                    log.info("1. Converted record: " + record);
-                    sourceRecordDeque.add(record);
+                    onMessageRecieved("messageArrivedCallback", topic, message);
                 }
 
                 @Override
@@ -62,16 +59,20 @@ public class MQTTSourceTask extends SourceTask implements IMqttMessageListener {
 
             log.info("Subscribing to " + topicSubscription + " with QOS " + qosLevel);
             mqttClient.subscribe(topicSubscription, qosLevel, (topic, message) -> {
-                log.info("2. Message arrived in connector from topic " + topic);
-                SourceRecord record = mqttSourceConverter.convert(topic, message);
-                log.info("2. Converted record: " + record);
-                sourceRecordDeque.add(record);
+                onMessageRecieved("subscribeCallback", topic, message);
             });
             log.info("Subscribed to " + topicSubscription + " with QOS " + qosLevel);
         }
         catch (MqttException e) {
             throw new ConnectException(e);
         }
+    }
+
+    public void onMessageRecieved(String source, String topic, MqttMessage message) throws Exception {
+        log.info(String.format("Message arrived in connector from topic %s from source %s", topic, source));
+        SourceRecord record = mqttSourceConverter.convert(topic, message);
+        log.info(String.format("Converted record: %s, from source: %s", record, source));
+        sourceRecordDeque.add(record);
     }
 
     private void connect(IMqttClient mqttClient) throws MqttException{
